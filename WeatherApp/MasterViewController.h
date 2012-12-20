@@ -9,14 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @class DetailViewController;
+@class AddCityViewController;
 
 #import <CoreData/CoreData.h>
 
 @interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
-
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+@property (strong, nonatomic) AddCityViewController *addCityViewController;
 
 @end

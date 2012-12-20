@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "City.h"
+#import "ForecastDay.h"
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) City * detailItem;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end

@@ -7,14 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
+#import <RestKit/RKJSONParserJSONKit.h>
+#define UIAppDelegate ((AppDelegate *)[UIApplication sharedApplication].delegate)
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) RKManagedObjectStore *objectStore;
+@property (readonly, strong, nonatomic) RKObjectManager *objectManager;
+@property (readonly, strong, nonatomic) RKObjectManager *autocompleteObjectManager;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

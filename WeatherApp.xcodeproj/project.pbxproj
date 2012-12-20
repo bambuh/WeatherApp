@@ -22,7 +22,65 @@
 		A89AA42E167F6AED00F43D5C /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A89AA42D167F6AED00F43D5C /* DetailViewController.m */; };
 		A89AA431167F6AED00F43D5C /* MasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A89AA42F167F6AED00F43D5C /* MasterViewController.xib */; };
 		A89AA434167F6AEE00F43D5C /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A89AA432167F6AEE00F43D5C /* DetailViewController.xib */; };
+		A89AA44E167F6C4400F43D5C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA445167F6BA900F43D5C /* libRestKit.a */; };
+		A89AA454167F6C4400F43D5C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA44F167F6C4400F43D5C /* CFNetwork.framework */; };
+		A89AA455167F6C4400F43D5C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA450167F6C4400F43D5C /* MobileCoreServices.framework */; };
+		A89AA456167F6C4400F43D5C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA451167F6C4400F43D5C /* QuartzCore.framework */; };
+		A89AA457167F6C4400F43D5C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA452167F6C4400F43D5C /* Security.framework */; };
+		A89AA458167F6C4400F43D5C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A89AA453167F6C4400F43D5C /* SystemConfiguration.framework */; };
+		A89AA45B167F6E4500F43D5C /* City.m in Sources */ = {isa = PBXBuildFile; fileRef = A89AA45A167F6E4500F43D5C /* City.m */; };
+		A89AA45E167F6E5D00F43D5C /* ForecastDay.m in Sources */ = {isa = PBXBuildFile; fileRef = A89AA45D167F6E5D00F43D5C /* ForecastDay.m */; };
+		A89AA462167F6F3C00F43D5C /* AddCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A89AA460167F6F3C00F43D5C /* AddCityViewController.m */; };
+		A89AA463167F6F3C00F43D5C /* AddCityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A89AA461167F6F3C00F43D5C /* AddCityViewController.xib */; };
+		A8CDB1281682082B009D1E57 /* FoundCity.m in Sources */ = {isa = PBXBuildFile; fileRef = A8CDB1271682082B009D1E57 /* FoundCity.m */; };
+		A8CDB13716820C8E009D1E57 /* ForecastDayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A8CDB13616820C8E009D1E57 /* ForecastDayCell.m */; };
+		A8CDB13916820CBE009D1E57 /* ForecastDayCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8CDB13816820CBE009D1E57 /* ForecastDayCell.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A89AA444167F6BA900F43D5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160D1614564E810060A5C5;
+			remoteInfo = RestKit;
+		};
+		A89AA446167F6BA900F43D5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160D2614564E820060A5C5;
+			remoteInfo = RestKitTests;
+		};
+		A89AA448167F6BA900F43D5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160E62145651060060A5C5;
+			remoteInfo = RestKitFramework;
+		};
+		A89AA44A167F6BA900F43D5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160E78145651060060A5C5;
+			remoteInfo = RestKitFrameworkTests;
+		};
+		A89AA44C167F6C1100F43D5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25160D1514564E810060A5C5;
+			remoteInfo = RestKit;
+		};
+		A8CDB11C1681A62C009D1E57 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 259C301615128079003066A2;
+			remoteInfo = RestKitResources;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A89AA408167F6AED00F43D5C /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +104,24 @@
 		A89AA42D167F6AED00F43D5C /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		A89AA430167F6AED00F43D5C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController.xib; sourceTree = "<group>"; };
 		A89AA433167F6AEE00F43D5C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController.xib; sourceTree = "<group>"; };
+		A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
+		A89AA44F167F6C4400F43D5C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		A89AA450167F6C4400F43D5C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		A89AA451167F6C4400F43D5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A89AA452167F6C4400F43D5C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A89AA453167F6C4400F43D5C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A89AA459167F6E4500F43D5C /* City.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = City.h; sourceTree = "<group>"; };
+		A89AA45A167F6E4500F43D5C /* City.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = City.m; sourceTree = "<group>"; };
+		A89AA45C167F6E5D00F43D5C /* ForecastDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForecastDay.h; sourceTree = "<group>"; };
+		A89AA45D167F6E5D00F43D5C /* ForecastDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForecastDay.m; sourceTree = "<group>"; };
+		A89AA45F167F6F3C00F43D5C /* AddCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCityViewController.h; sourceTree = "<group>"; };
+		A89AA460167F6F3C00F43D5C /* AddCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddCityViewController.m; sourceTree = "<group>"; };
+		A89AA461167F6F3C00F43D5C /* AddCityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddCityViewController.xib; sourceTree = "<group>"; };
+		A8CDB1261682082B009D1E57 /* FoundCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoundCity.h; sourceTree = "<group>"; };
+		A8CDB1271682082B009D1E57 /* FoundCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoundCity.m; sourceTree = "<group>"; };
+		A8CDB13516820C8E009D1E57 /* ForecastDayCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForecastDayCell.h; sourceTree = "<group>"; };
+		A8CDB13616820C8E009D1E57 /* ForecastDayCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForecastDayCell.m; sourceTree = "<group>"; };
+		A8CDB13816820CBE009D1E57 /* ForecastDayCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForecastDayCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +129,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A89AA454167F6C4400F43D5C /* CFNetwork.framework in Frameworks */,
+				A89AA455167F6C4400F43D5C /* MobileCoreServices.framework in Frameworks */,
+				A89AA456167F6C4400F43D5C /* QuartzCore.framework in Frameworks */,
+				A89AA457167F6C4400F43D5C /* Security.framework in Frameworks */,
+				A89AA458167F6C4400F43D5C /* SystemConfiguration.framework in Frameworks */,
+				A89AA44E167F6C4400F43D5C /* libRestKit.a in Frameworks */,
 				A89AA40D167F6AED00F43D5C /* UIKit.framework in Frameworks */,
 				A89AA40F167F6AED00F43D5C /* Foundation.framework in Frameworks */,
 				A89AA411167F6AED00F43D5C /* CoreGraphics.framework in Frameworks */,
@@ -66,6 +148,12 @@
 		A89AA3FD167F6AED00F43D5C = {
 			isa = PBXGroup;
 			children = (
+				A89AA44F167F6C4400F43D5C /* CFNetwork.framework */,
+				A89AA450167F6C4400F43D5C /* MobileCoreServices.framework */,
+				A89AA451167F6C4400F43D5C /* QuartzCore.framework */,
+				A89AA452167F6C4400F43D5C /* Security.framework */,
+				A89AA453167F6C4400F43D5C /* SystemConfiguration.framework */,
+				A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */,
 				A89AA414167F6AED00F43D5C /* WeatherApp */,
 				A89AA40B167F6AED00F43D5C /* Frameworks */,
 				A89AA409167F6AED00F43D5C /* Products */,
@@ -98,11 +186,23 @@
 				A89AA41E167F6AED00F43D5C /* AppDelegate.m */,
 				A89AA429167F6AED00F43D5C /* MasterViewController.h */,
 				A89AA42A167F6AED00F43D5C /* MasterViewController.m */,
+				A89AA42F167F6AED00F43D5C /* MasterViewController.xib */,
 				A89AA42C167F6AED00F43D5C /* DetailViewController.h */,
 				A89AA42D167F6AED00F43D5C /* DetailViewController.m */,
-				A89AA42F167F6AED00F43D5C /* MasterViewController.xib */,
 				A89AA432167F6AEE00F43D5C /* DetailViewController.xib */,
+				A8CDB13516820C8E009D1E57 /* ForecastDayCell.h */,
+				A8CDB13616820C8E009D1E57 /* ForecastDayCell.m */,
+				A8CDB13816820CBE009D1E57 /* ForecastDayCell.xib */,
+				A89AA45F167F6F3C00F43D5C /* AddCityViewController.h */,
+				A89AA460167F6F3C00F43D5C /* AddCityViewController.m */,
+				A89AA461167F6F3C00F43D5C /* AddCityViewController.xib */,
 				A89AA426167F6AED00F43D5C /* WeatherApp.xcdatamodeld */,
+				A89AA45C167F6E5D00F43D5C /* ForecastDay.h */,
+				A89AA45D167F6E5D00F43D5C /* ForecastDay.m */,
+				A89AA459167F6E4500F43D5C /* City.h */,
+				A89AA45A167F6E4500F43D5C /* City.m */,
+				A8CDB1261682082B009D1E57 /* FoundCity.h */,
+				A8CDB1271682082B009D1E57 /* FoundCity.m */,
 				A89AA415167F6AED00F43D5C /* Supporting Files */,
 			);
 			path = WeatherApp;
@@ -122,6 +222,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A89AA43B167F6BA800F43D5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A89AA445167F6BA900F43D5C /* libRestKit.a */,
+				A89AA447167F6BA900F43D5C /* RestKitTests.octest */,
+				A89AA449167F6BA900F43D5C /* RestKit.framework */,
+				A89AA44B167F6BA900F43D5C /* RestKitFrameworkTests.octest */,
+				A8CDB11D1681A62C009D1E57 /* RestKitResources.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -136,6 +248,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A89AA44D167F6C1100F43D5C /* PBXTargetDependency */,
 			);
 			name = WeatherApp;
 			productName = WeatherApp;
@@ -161,12 +274,56 @@
 			mainGroup = A89AA3FD167F6AED00F43D5C;
 			productRefGroup = A89AA409167F6AED00F43D5C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A89AA43B167F6BA800F43D5C /* Products */;
+					ProjectRef = A89AA43A167F6BA800F43D5C /* RestKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A89AA407167F6AED00F43D5C /* WeatherApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A89AA445167F6BA900F43D5C /* libRestKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKit.a;
+			remoteRef = A89AA444167F6BA900F43D5C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A89AA447167F6BA900F43D5C /* RestKitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RestKitTests.octest;
+			remoteRef = A89AA446167F6BA900F43D5C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A89AA449167F6BA900F43D5C /* RestKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RestKit.framework;
+			remoteRef = A89AA448167F6BA900F43D5C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A89AA44B167F6BA900F43D5C /* RestKitFrameworkTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RestKitFrameworkTests.octest;
+			remoteRef = A89AA44A167F6BA900F43D5C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A8CDB11D1681A62C009D1E57 /* RestKitResources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RestKitResources.bundle;
+			remoteRef = A8CDB11C1681A62C009D1E57 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A89AA406167F6AED00F43D5C /* Resources */ = {
@@ -179,6 +336,8 @@
 				A89AA425167F6AED00F43D5C /* Default-568h@2x.png in Resources */,
 				A89AA431167F6AED00F43D5C /* MasterViewController.xib in Resources */,
 				A89AA434167F6AEE00F43D5C /* DetailViewController.xib in Resources */,
+				A89AA463167F6F3C00F43D5C /* AddCityViewController.xib in Resources */,
+				A8CDB13916820CBE009D1E57 /* ForecastDayCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,10 +353,23 @@
 				A89AA428167F6AED00F43D5C /* WeatherApp.xcdatamodeld in Sources */,
 				A89AA42B167F6AED00F43D5C /* MasterViewController.m in Sources */,
 				A89AA42E167F6AED00F43D5C /* DetailViewController.m in Sources */,
+				A89AA45B167F6E4500F43D5C /* City.m in Sources */,
+				A89AA45E167F6E5D00F43D5C /* ForecastDay.m in Sources */,
+				A89AA462167F6F3C00F43D5C /* AddCityViewController.m in Sources */,
+				A8CDB1281682082B009D1E57 /* FoundCity.m in Sources */,
+				A8CDB13716820C8E009D1E57 /* ForecastDayCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A89AA44D167F6C1100F43D5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = A89AA44C167F6C1100F43D5C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		A89AA417167F6AED00F43D5C /* InfoPlist.strings */ = {
@@ -282,7 +454,12 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeatherApp/WeatherApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeatherApp/WeatherApp-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -293,7 +470,12 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeatherApp/WeatherApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeatherApp/WeatherApp-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -318,6 +500,7 @@
 				A89AA439167F6AEE00F43D5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -12,18 +12,19 @@
 
 @implementation AppDelegate
 
-@synthesize managedObjectContext = _managedObjectContext;
+//@synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize objectStore = _objectStore;
+@synthesize objectManager = _objectManager;
+@synthesize autocompleteObjectManager = _autocompleteObjectManager;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-
     MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
-    masterViewController.managedObjectContext = self.managedObjectContext;
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
@@ -60,7 +61,7 @@
 - (void)saveContext
 {
     NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    NSManagedObjectContext *managedObjectContext = self.objectStore.primaryManagedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
              // Replace this implementation with code to handle the error appropriately.
@@ -71,23 +72,54 @@
     }
 }
 
+#pragma mark - RestKit
+
+- (RKManagedObjectStore *)objectStore
+{
+    if (_objectStore != nil) {
+        return _objectStore;
+    }
+    _objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"WeatherApp.sqlite"];
+    //[_objectStore createPersistentStoreCoordinator];
+    //[_objectStore createManagedObjectContexts];
+    [[RKParserRegistry sharedRegistry] setParserClass:[RKJSONParserJSONKit class] forMIMEType:@"text/html"];
+    return _objectStore;
+}
+- (RKObjectManager *)objectManager
+{
+    if (_objectManager != nil) {
+        return _objectManager;
+    }
+    _objectManager = [RKObjectManager managerWithBaseURLString:@"http://api.wunderground.com/"];
+    return _objectManager;
+}
+- (RKObjectManager *)autocompleteObjectManager
+{
+    if (_autocompleteObjectManager != nil) {
+        return _autocompleteObjectManager;
+    }
+    _autocompleteObjectManager = [RKObjectManager managerWithBaseURLString:@"http://autocomplete.wunderground.com/"];
+    _autocompleteObjectManager.serializationMIMEType = RKMIMETypeJSON;
+    return _autocompleteObjectManager;
+}
+
 #pragma mark - Core Data stack
 
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
-- (NSManagedObjectContext *)managedObjectContext
-{
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
-    }
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
-    return _managedObjectContext;
-}
+//- (NSManagedObjectContext *)managedObjectContext
+//{
+//    if (_managedObjectContext != nil) {
+//        return _managedObjectContext;
+//    }
+//    
+//    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+//    if (coordinator != nil) {
+//        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+//        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+//    }
+//    return _managedObjectContext;
+//}
 
 // Returns the managed object model for the application.
 // If the model doesn't already exist, it is created from the application's model.
