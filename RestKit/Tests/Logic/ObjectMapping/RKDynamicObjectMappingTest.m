@@ -1,5 +1,5 @@
 //
-//  RKDynamicObjectMappingTest.m
+//  RKDynamicMappingTest.m
 //  RestKit
 //
 //  Created by Blake Watters on 7/28/11.
@@ -19,119 +19,71 @@
 //
 
 #import "RKTestEnvironment.h"
-#import "RKDynamicObjectMapping.h"
+#import "RKDynamicMapping.h"
 #import "RKDynamicMappingModels.h"
 
-@interface RKDynamicObjectMappingTest : RKTestCase <RKDynamicObjectMappingDelegate>
+@interface RKDynamicMappingTest : RKTestCase
 
 @end
 
-@implementation RKDynamicObjectMappingTest
+@implementation RKDynamicMappingTest
 
 - (void)testShouldPickTheAppropriateMappingBasedOnAnAttributeValue
 {
-    RKDynamicObjectMapping *dynamicMapping = [RKDynamicObjectMapping dynamicMapping];
-    RKObjectMapping *girlMapping = [RKObjectMapping mappingForClass:[Girl class] usingBlock:^(RKObjectMapping *mapping) {
-        [mapping mapAttributes:@"name", nil];
-    }];
-    RKObjectMapping *boyMapping = [RKObjectMapping mappingForClass:[Boy class] usingBlock:^(RKObjectMapping *mapping) {
-        [mapping mapAttributes:@"name", nil];
-    }];
+    RKDynamicMapping *dynamicMapping = [RKDynamicMapping new];
+    RKObjectMapping *girlMapping = [RKObjectMapping mappingForClass:[Girl class]];
+    [girlMapping addAttributeMappingsFromArray:@[@"name"]];
+    RKObjectMapping *boyMapping = [RKObjectMapping mappingForClass:[Boy class]];
+    [boyMapping addAttributeMappingsFromArray:@[@"name"]];
     [dynamicMapping setObjectMapping:girlMapping whenValueOfKeyPath:@"type" isEqualTo:@"Girl"];
     [dynamicMapping setObjectMapping:boyMapping whenValueOfKeyPath:@"type" isEqualTo:@"Boy"];
-    RKObjectMapping *mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
+    RKObjectMapping *mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Girl")));
-    mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
+    mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Boy")));
 }
 
 - (void)testShouldMatchOnAnNSNumberAttributeValue
 {
-    RKDynamicObjectMapping *dynamicMapping = [RKDynamicObjectMapping dynamicMapping];
-    RKObjectMapping *girlMapping = [RKObjectMapping mappingForClass:[Girl class] usingBlock:^(RKObjectMapping *mapping) {
-        [mapping mapAttributes:@"name", nil];
-    }];
-    RKObjectMapping *boyMapping = [RKObjectMapping mappingForClass:[Boy class] usingBlock:^(RKObjectMapping *mapping) {
-        [mapping mapAttributes:@"name", nil];
-    }];
+    RKDynamicMapping *dynamicMapping = [RKDynamicMapping new];
+    RKObjectMapping *girlMapping = [RKObjectMapping mappingForClass:[Girl class]];
+    [girlMapping addAttributeMappingsFromArray:@[@"name"]];
+    RKObjectMapping *boyMapping = [RKObjectMapping mappingForClass:[Boy class]];
+    [boyMapping addAttributeMappingsFromArray:@[@"name"]];
     [dynamicMapping setObjectMapping:girlMapping whenValueOfKeyPath:@"numeric_type" isEqualTo:[NSNumber numberWithInt:0]];
     [dynamicMapping setObjectMapping:boyMapping whenValueOfKeyPath:@"numeric_type" isEqualTo:[NSNumber numberWithInt:1]];
-    RKObjectMapping *mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
+    RKObjectMapping *mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Girl")));
-    mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
-    assertThat(mapping, is(notNilValue()));
-    assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Boy")));
-}
-
-- (void)testShouldPickTheAppropriateMappingBasedOnDelegateCallback
-{
-    RKDynamicObjectMapping *dynamicMapping = [RKDynamicObjectMapping dynamicMapping];
-    dynamicMapping.delegate = self;
-    RKObjectMapping *mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
-    assertThat(mapping, is(notNilValue()));
-    assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Girl")));
-    mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
+    mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Boy")));
 }
 
 - (void)testShouldPickTheAppropriateMappingBasedOnBlockDelegateCallback
 {
-    RKDynamicObjectMapping *dynamicMapping = [RKDynamicObjectMapping dynamicMapping];
-    dynamicMapping.objectMappingForDataBlock = ^ RKObjectMapping *(id data) {
-        if ([[data valueForKey:@"type"] isEqualToString:@"Girl"]) {
-            return [RKObjectMapping mappingForClass:[Girl class] usingBlock:^(RKObjectMapping *mapping) {
-                [mapping mapAttributes:@"name", nil];
-            }];
-        } else if ([[data valueForKey:@"type"] isEqualToString:@"Boy"]) {
-            return [RKObjectMapping mappingForClass:[Boy class] usingBlock:^(RKObjectMapping *mapping) {
-                [mapping mapAttributes:@"name", nil];
-            }];
+    RKDynamicMapping *dynamicMapping = [RKDynamicMapping new];
+    [dynamicMapping setObjectMappingForRepresentationBlock:^RKObjectMapping *(id representation) {
+        if ([[representation valueForKey:@"type"] isEqualToString:@"Girl"]) {
+            RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Girl class]];
+            [mapping addAttributeMappingsFromArray:@[@"name"]];
+            return mapping;
+        } else if ([[representation valueForKey:@"type"] isEqualToString:@"Boy"]) {
+            RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Boy class]];
+            [mapping addAttributeMappingsFromArray:@[@"name"]];
+            return mapping;
         }
 
         return nil;
-    };
-    RKObjectMapping *mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
+    }];
+    RKObjectMapping *mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"girl.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Girl")));
-    mapping = [dynamicMapping objectMappingForDictionary:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
+    mapping = [dynamicMapping objectMappingForRepresentation:[RKTestFixture parsedObjectWithContentsOfFixture:@"boy.json"]];
     assertThat(mapping, is(notNilValue()));
     assertThat(NSStringFromClass(mapping.objectClass), is(equalTo(@"Boy")));
-}
-
-- (void)testShouldFailAnAssertionWhenInvokedWithSomethingOtherThanADictionary
-{
-    NSException *exception = nil;
-    RKDynamicObjectMapping *dynamicMapping = [RKDynamicObjectMapping dynamicMapping];
-    @try {
-        [dynamicMapping objectMappingForDictionary:(NSDictionary *)[NSArray array]];
-    }
-    @catch (NSException *e) {
-        exception = e;
-    }
-    @finally {
-        assertThat(exception, is(notNilValue()));
-    }
-}
-
-#pragma mark - RKDynamicObjectMappingDelegate
-
-- (RKObjectMapping *)objectMappingForData:(id)data
-{
-    if ([[data valueForKey:@"type"] isEqualToString:@"Girl"]) {
-        return [RKObjectMapping mappingForClass:[Girl class] usingBlock:^(RKObjectMapping *mapping) {
-            [mapping mapAttributes:@"name", nil];
-        }];
-    } else if ([[data valueForKey:@"type"] isEqualToString:@"Boy"]) {
-        return [RKObjectMapping mappingForClass:[Boy class] usingBlock:^(RKObjectMapping *mapping) {
-            [mapping mapAttributes:@"name", nil];
-        }];
-    }
-
-    return nil;
 }
 
 @end

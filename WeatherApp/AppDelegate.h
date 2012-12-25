@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-#import <RestKit/RKJSONParserJSONKit.h>
+#import <RestKit/RKMIMETypeSerialization.h>
+#import "FoundCity.h"
+#import "ForecastDay.h"
+
 #define UIAppDelegate ((AppDelegate *)[UIApplication sharedApplication].delegate)
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

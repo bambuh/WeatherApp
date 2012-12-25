@@ -26,7 +26,7 @@
 
  Can be nil.
  */
-@property (nonatomic, assign) id object;
+@property (nonatomic, weak) id object;
 
 /**
  The timeout interval, in seconds, to wait for the notification to be posted.
@@ -57,6 +57,14 @@
  @param notificationName The name of the NSNotification we want to watch for
  */
 + (RKTestNotificationObserver *)notificationObserverForName:(NSString *)notificationName;
+
+/**
+ Adds the receiver as an observer for the notification name and object under test.
+
+ If the observer has not already been added when waitForNotification
+ is invoked, it will be added before the runloop cycling begins.
+ */
+- (void)addObserver;
 
 /**
  Wait for a notification matching the name and source object we are observing to be posted.

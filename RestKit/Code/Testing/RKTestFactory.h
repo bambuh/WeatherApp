@@ -1,131 +1,108 @@
 //
 //  RKTestFactory.h
-//  RKGithub
+//  RestKit
 //
 //  Created by Blake Watters on 2/16/12.
 //  Copyright (c) 2009-2012 RestKit. All rights reserved.
 //
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
 
-#import <RestKit/RestKit.h>
+#import <CoreData/CoreData.h>
 
 /**
  The default filename used for managed object stores created via the factory.
-
- @see [RKTestFactory setManagedObjectStoreFilename:]
  */
 extern NSString * const RKTestFactoryDefaultStoreFilename;
-
-/**
- Defines optional callback methods for extending the functionality of the
- factory. Implementation can be provided via a category.
-
- @see RKTestFactory
- */
-@protocol RKTestFactoryCallbacks <NSObject>
-
-@optional
-
-///-----------------------------------------------------------------------------
-/// @name Customizing the Factory
-///-----------------------------------------------------------------------------
-
-/**
- Application specific initialization point for the factory.
- Called once per unit testing run when the factory singleton instance is initialized. RestKit
- applications may override via a category.
- */
-+ (void)didInitialize;
-
-/**
- Application specific customization point for the factory.
- Invoked each time the factory is asked to set up the environment. RestKit applications
- leveraging the factory may override via a category.
- */
-+ (void)didSetUp;
-
-/**
- Application specific customization point for the factory.
- Invoked each time the factory is tearing down the environment. RestKit applications
- leveraging the factory may override via a category.
- */
-+ (void)didTearDown;
-
-@end
 
 /*
  Default Factory Names
  */
 extern NSString * const RKTestFactoryDefaultNamesClient;
 extern NSString * const RKTestFactoryDefaultNamesObjectManager;
-extern NSString * const RKTestFactoryDefaultNamesMappingProvider;
 extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
 
 /**
- RKTestFactory provides an interface for initializing RestKit
- objects within a unit testing environment. The factory is used to ensure isolation
- between test cases by ensuring that RestKit's important singleton objects are torn
- down between tests and that each test is working within a clean Core Data environment.
- Callback hooks are provided so that application specific set up and tear down logic can be
- integrated as well.
+ The `RKTestFactory` class provides an interface for initializing RestKit objects within a unit testing environment. The factory is used to ensure isolation between test cases by ensuring that RestKit's important singleton objects are torn down between tests and that each test is working within a clean Core Data environment. Callback hooks are provided so that application specific set up and tear down logic can be integrated as well.
 
- The factory also provides for the definition of named factories for instantiating objects
- quickly. At initialization, there are factories defined for creating instances of RKClient,
- RKObjectManager, RKObjectMappingProvider, and RKManagedObjectStore. These factories may be
- redefined within your application should you choose to utilize a subclass or wish to centralize
- configuration of objects across the test suite. You may also define additional factories for building
- instances of objects specific to your application using the same infrastructure.
+ The factory also provides for the definition of named factories for instantiating objects quickly. At initialization, there are factories defined for creating instances of `AFHTTPClient`, `RKObjectManager`, and `RKManagedObjectStore`. These factories may be redefined within your application should you choose to utilize a subclass or wish to centralize configuration of objects across the test suite. You may also define additional factories for building instances of objects specific to your application using the same infrastructure.
+
+ ## Customizing the Factory
+
+ The test factory is designed to be customized via an Objective-C category. All factory methods are implemented using blocks that have sensible defaults, but can be overridden by providing an alternate implementation. To do so, implement a category on the `RKTestFactory` class and provide an implementation of the `+ (void)load` method. Within the method body, configure your blocks as you see fit. An example implementation is provided below:
+
+    @interface RKTestFactory (MyApp)
+
+    // Create a convenience method for retrieving an object from the factory
+    + (GGAirport *)ohareAirport;
+    @end
+
+    @implementation RKTestFactory (MyApp)
+
+    + (void)load
+    {
+        [self setSetUpBlock:{
+            // I am called on every invocation of `setUp`!
+        }];
+
+        // Replace the default object manager factory
+        [RKTestFactory defineFactory:RKTestFactoryDefaultNamesObjectManager withBlock:^id {
+            GGObjectManager *objectManager = [[GGObjectManager alloc] initWithBaseURL:[self baseURL]];
+            return objectManager;
+         }];
+
+        // Define a new factory called 'ORD' that returns a representation of Chicago's O'Hare Airport
+        [RKTestFactory defineFactory:@"ORD" withBlock:^id{
+            GGAirport *ord = [RKTestFactory insertManagedObjectForEntityForName:@"Airport" inManagedObjectContext:nil withProperties:nil];
+            ord.airportID = @16;
+            ord.name = @"Chicago O'Hare International Airport";
+            ord.code = @"ORD";
+            ord.city = @"Chicago";
+            ord.favorite = @(YES);
+            ord.timeZoneName = @"America/Chicago";
+            ord.latitude = @(41.9781);
+            ord.longitude = @(-87.9061);
+
+            return ord;
+         }];
+    }
+
+    + (GGAirport *)ohareAirport
+    {
+        return [self objectFromFactory:@"ORD"];
+    }
+
+    @end
  */
-@interface RKTestFactory : NSObject <RKTestFactoryCallbacks>
+@interface RKTestFactory : NSObject
 
-///-----------------------------------------------------------------------------
+///------------------------------
 /// @name Configuring the Factory
-///-----------------------------------------------------------------------------
+///------------------------------
 
 /**
- Returns the base URL with which to initialize RKClient and RKObjectManager
- instances created via the factory.
+ Returns the base URL with which to initialize `AFHTTPClient` and `RKObjectManager` instances created via the factory.
 
  @return The base URL for the factory.
  */
-+ (RKURL *)baseURL;
++ (NSURL *)baseURL;
 
 /**
  Sets the base URL for the factory.
 
  @param URL The new base URL.
  */
-+ (void)setBaseURL:(RKURL *)URL;
-
-/**
- Returns the base URL as a string value.
-
- @return The base URL for the factory, as a string.
- */
-+ (NSString *)baseURLString;
-
-/**
- Sets the base URL for the factory to a new value by constructing an RKURL
- from the given string.
-
- @param baseURLString A string containing the URL to set as the base URL for the factory.
- */
-+ (void)setBaseURLString:(NSString *)baseURLString;
-
-/**
- Returns the filename used when constructing instances of RKManagedObjectStore
- via the factory.
-
- @return A string containing the filename to use when creating a managed object store.
- */
-+ (NSString *)managedObjectStoreFilename;
-
-/**
- Sets the filename to use when the factory constructs an instance of RKManagedObjectStore.
-
- @param managedObjectStoreFilename A string containing the filename to use when creating managed object
- store instances.
- */
-+ (void)setManagedObjectStoreFilename:(NSString *)managedObjectStoreFilename;
++ (void)setBaseURL:(NSURL *)URL;
 
 ///-----------------------------------------------------------------------------
 /// @name Defining & Instantiating Objects from Factories
@@ -146,14 +123,37 @@ extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
 + (void)defineFactory:(NSString *)factoryName withBlock:(id (^)())block;
 
 /**
- Creates and returns a new instance of an object using the factory with the given
- name.
+ Creates and returns a new instance of an object using the factory with the given name.
 
  @param factoryName The name of the factory to use when building the requested object.
  @raises NSInvalidArgumentException Raised if a factory with the given name is not defined.
+ @param properties An `NSDictionary` of properties to be set on the created object.
  @return An object built using the factory registered for the given name.
  */
++ (id)objectFromFactory:(NSString *)factoryName properties:(NSDictionary *)properties;
 + (id)objectFromFactory:(NSString *)factoryName;
+
+/**
+ Fetches a shared object from the factory with the given name. If an existing object has already been created, then that instance is returned. If a shared instance does not yet exist, one will be constructed and returned for this and all subsequent invocations of `sharedObjectFromFactory:`. Shared object instances are discarded when the factory is torn down.
+
+ Shared objects are used to return object instances for cases where it does not make sense to instantiate a new instance on every invocation of the factory. A common example where this is appropriate is the `managedObjectStore` factory, where construction of a new store on each invocation would yield managed objects that cross Core Data stacks.
+
+ @param factoryName The name of the factory to retrieve the shared instance of.
+ @return The shared object instance for the factory registered with the given name.
+ */
++ (id)sharedObjectFromFactory:(NSString *)factoryName;
+
+/**
+ Inserts a new managed object for the `NSEntityDescription` with the given name into the specified  managed object context and sets properties on the instance from the given dictionary. A permanent managed object ID is obtained for the object so that it can be referenced across threads without any further work.
+ 
+ @param entityName The name of the entity to insert a new managed object for.
+ @param managedObjectContext The managed object context to insert the new object into. If nil, then the managed object context returned by invoking `[RKTestFactory managedObjectStore].mainQueueManagedObjectContext]` is used.
+ @param properties A dictionary of properties to be set on the new managed object instance.
+ @return A new object inheriting from `NSManagedObject`.
+ */
++ (id)insertManagedObjectForEntityForName:(NSString *)entityName
+                   inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                           withProperties:(NSDictionary *)properties;
 
 /**
  Returns a set of names for all defined factories.
@@ -162,73 +162,61 @@ extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
  */
 + (NSSet *)factoryNames;
 
-///-----------------------------------------------------------------------------
-/// @name Building Instances
-///-----------------------------------------------------------------------------
+///--------------------------------
+/// @name Retrieving Shared Objects
+///--------------------------------
 
 /**
- Creates and returns an RKClient instance using the factory defined
- for the name RKTestFactoryDefaultNamesClient.
+ Fetches the shared `AFHTTPClient` object using the factory defined for the name `RKTestFactoryDefaultNamesClient`.
 
- @return A new client instance.
+ @return The shared client instance.
  */
 + (id)client;
 
 /**
- Creates and returns an RKObjectManager instance using the factory defined
- for the name RKTestFactoryDefaultNamesObjectManager.
+ Fetches the shared `RKObjectManager` object using the factory defined for the name `RKTestFactoryDefaultNamesObjectManager`.
 
- @return A new object manager instance.
+ @return The shared object manager instance.
  */
 + (id)objectManager;
 
 /**
- Creates and returns an RKObjectMappingProvider instance using the factory defined
- for the name RKTestFactoryDefaultNamesMappingProvider.
+ Fetches the shared an `RKManagedObjectStore` object using the factory defined for the name `RKTestFactoryDefaultNamesManagedObjectStore`.
 
- @return A new object mapping provider instance.
- */
-+ (id)mappingProvider;
+ On first invocation per factory setup/teardown, a new managed object store will be configured and returned. If there is an existing persistent store (i.e. from a previous test invocation), then the persistent store is deleted.
 
-/**
- Creates and returns a RKManagedObjectStore instance using the factory defined
- for the name RKTestFactoryDefaultNamesManagedObjectStore.
-
- A new managed object store will be configured and returned. If there is an existing
- persistent store (i.e. from a previous test invocation), then the persistent store
- is deleted.
-
- @return A new managed object store instance.
+ @return The shared managed object store instance.
  */
 + (id)managedObjectStore;
 
-///-----------------------------------------------------------------------------
-/// @name Managing Test State
-///-----------------------------------------------------------------------------
+///----------------------------------------------
+/// @name Configuring Set Up and Tear Down Blocks
+///----------------------------------------------
 
 /**
- Sets up the RestKit testing environment. Invokes the didSetUp callback for application
- specific setup.
+ Sets a block to be executed when the `setUp` method is called as part of a test run.
+ */
++ (void)setSetupBlock:(void (^)())block;
+
+/**
+ Sets a block to be executed when the `tearDown` method is called as part of a test run.
+ */
++ (void)setTearDownBlock:(void (^)())block;
+
+///--------------------------
+/// @name Managing Test State
+///--------------------------
+
+/**
+ Sets up the RestKit testing environment. Executes the block set via `setSetupBlock:` to perform application specific setup.
+
+ Note that the firt time that the `setUp` method is invoked, it will execute a `tearDown` to clear any configuration that may have taken place in during application launch.
  */
 + (void)setUp;
 
 /**
- Tears down the RestKit testing environment by clearing singleton instances, helping to
- ensure test case isolation. Invokes the didTearDown callback for application specific
- cleanup.
+ Tears down the RestKit testing environment by clearing singleton instances, helping to ensure test case isolation. Executes the block set via `setTearDownBlock:` to perform application specific cleanup.
  */
 + (void)tearDown;
-
-///-----------------------------------------------------------------------------
-/// @name Other Tasks
-///-----------------------------------------------------------------------------
-
-/**
- Clears the contents of the cache directory by removing the directory and
- recreating it.
-
- @see [RKDirectory cachesDirectory]
- */
-+ (void)clearCacheDirectory;
 
 @end

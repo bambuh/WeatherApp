@@ -7,7 +7,6 @@
 //
 
 #import "MasterViewController.h"
-#import "AppDelegate.h"
 #import "DetailViewController.h"
 #import "AddCityViewController.h"
 #import "City.h"
@@ -128,7 +127,7 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"City" inManagedObjectContext:UIAppDelegate.objectStore.primaryManagedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"City" inManagedObjectContext:RKManagedObjectStore.defaultStore.persistentStoreManagedObjectContext];
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
@@ -142,7 +141,7 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:UIAppDelegate.objectStore.primaryManagedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:RKManagedObjectStore.defaultStore.persistentStoreManagedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     

@@ -21,20 +21,14 @@
 #import <Foundation/Foundation.h>
 #import "RKMappableAssociation.h"
 
-@interface RKMappableObject : NSObject {
-    NSDate *_dateTest;
-    NSNumber *_numberTest;
-    NSString *_stringTest;
-    NSURL *_urlTest;
-    RKMappableAssociation *_hasOne;
-    NSSet *_hasMany;
-}
+@interface RKMappableObject : NSObject
 
-@property (nonatomic, retain) NSDate *dateTest;
-@property (nonatomic, retain) NSNumber *numberTest;
-@property (nonatomic, retain) NSString *stringTest;
-@property (nonatomic, retain) NSURL *urlTest;
-@property (nonatomic, retain) RKMappableAssociation *hasOne;
-@property (nonatomic, retain) NSSet *hasMany;
+@property (nonatomic, strong) NSDate *dateTest;
+@property (nonatomic, strong) NSNumber *numberTest;
+@property (nonatomic, strong) NSString *stringTest;
+@property (nonatomic, strong) NSURL *urlTest;
+@property (nonatomic, strong) RKMappableAssociation *hasOne;
+@property (nonatomic, strong) NSSet *hasMany;
+@property (nonatomic, assign) BOOL isValid;
 
 @end

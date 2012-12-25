@@ -9,7 +9,6 @@
 #import "City.h"
 #import "AppDelegate.h"
 #import "ForecastDay.h"
-#import "FoundCity.h"
 
 
 @implementation City
@@ -20,56 +19,56 @@
 @dynamic forecastDay;
 
 
-+ (void)findCityByStr:(NSString *)str delegate:(id)delegate
-{
-    RKObjectMapping *objectMapping = [RKObjectMapping mappingForClass:[FoundCity class]];
-//    objectMapping.primaryKeyAttribute = @"city";
-    [objectMapping mapKeyPath:@"name" toAttribute:@"city"];
-    [objectMapping mapKeyPath:@"l" toAttribute:@"location"];
-    NSString *resourcePath = [NSString stringWithFormat:@"/aq?query=%@", str];
-    [UIAppDelegate.autocompleteObjectManager.mappingProvider setObjectMapping:objectMapping forKeyPath:@"RESULTS"];
-    [UIAppDelegate.autocompleteObjectManager loadObjectsAtResourcePath:resourcePath delegate:delegate];
-
-}
 + (void)addCity:(NSString *)city withLocation:(NSString *)location{
+    NSManagedObjectContext * context = RKManagedObjectStore.defaultStore.persistentStoreManagedObjectContext;
     City *newCity = (City*)[NSEntityDescription
                             insertNewObjectForEntityForName:@"City"
-                            inManagedObjectContext:UIAppDelegate.objectStore.primaryManagedObjectContext];
+                            inManagedObjectContext:context];
     
     NSError *error = nil;
     newCity.city = city;
     newCity.location = location;
-    if (![UIAppDelegate.objectStore.primaryManagedObjectContext save:&error]) {
+    if (![context save:&error]) {
     }
     [newCity getForecast];
     
 }
 - (void)getForecast{
-    NSString *resourcePath = [NSString stringWithFormat:@"/api/ada2b3fdf05e0a10/forecast%@.json", self.location];
-    [UIAppDelegate.objectManager.mappingProvider setObjectMapping:[ForecastDay objectMapping] forKeyPath:@"forecast.txt_forecast.forecastday"];
-    [UIAppDelegate.objectManager loadObjectsAtResourcePath:resourcePath delegate:self];
+    NSString *resourcePath = [NSString stringWithFormat:@"api/ada2b3fdf05e0a10/forecast%@.json", self.location];
+    [UIAppDelegate.objectManager
+         getObjectsAtPath:resourcePath parameters:nil
+         success:^(RKObjectRequestOperation *operation, RKMappingResult *result)
+         {
+             NSManagedObjectContext * context = [result.firstObject managedObjectContext];
+             City *cityInCurrentContext = [[City findByAttribute:@"city" withValue:self.city inContext:context] objectAtIndex:0];
+             [cityInCurrentContext addForecastDay:result.set];
+             NSError *error = nil;
+             if (![context save:&error]) {
+                 NSLog(@"ERROR: %@", error);
+             }
+             [[[RKManagedObjectStore defaultStore] mainQueueManagedObjectContext] save:&error];
+             [[[RKManagedObjectStore defaultStore] persistentStoreManagedObjectContext] save:&error];
+         }
+         failure:^(RKObjectRequestOperation *operation, NSError *error)
+         {
+             // Error handler.
+             NSLog(@"ERROR %@", error);
+         }];
 }
++(NSArray *)findByAttribute:(NSString *)attr withValue:(NSString *)value inContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"City" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
 
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    NSLog(@"RESPONSE BODY:   %@", response.bodyAsString);
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSManagedObjectContext * context = [objects[0] managedObjectContext];
-    City *cityInCurrentContext = [City findFirstByAttribute:@"city" withValue:self.city inContext:context];
-    NSSet *set = [NSSet setWithArray:objects];
-    [cityInCurrentContext addForecastDay:set];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"city == %@", value];
+    [fetchRequest setPredicate:predicate];
     NSError *error = nil;
-    if (![context save:&error]) {
+    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    if (fetchedObjects == nil) {
+        NSLog(@"Problem! %@",error);
     }
-    
+    return fetchedObjects;
 }
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Encountered an error: %@", error);
-}
-
-
 
 @end

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <RestKit/RestKit.h>
-#import "AppDelegate.h"
 
 @class City;
 
@@ -20,6 +19,6 @@
 @property (nonatomic) int16_t day;
 @property (nonatomic, retain) City *city;
 
-+(RKManagedObjectMapping *)objectMapping;
-
++(RKResponseDescriptor *)responseDescriptor;
++(NSArray *)findByAttribute:(NSString *)attr withValue:(id)value;
 @end

@@ -8,6 +8,7 @@
 
 #import "AddCityViewController.h"
 #import "City.h"
+#import "FoundCity.h"
 
 @interface AddCityViewController ()
 
@@ -62,22 +63,20 @@
 }
 
 - (IBAction)findCity:(id)sender {
-    [City findCityByStr:self.cityInput.text delegate:self];
+    NSString *resourcePath = [NSString stringWithFormat:@"/aq?query=%@", self.cityInput.text];
+    [UIAppDelegate.autocompleteObjectManager
+            getObjectsAtPath:resourcePath parameters:nil
+            success:^(RKObjectRequestOperation *operation, RKMappingResult *result)
+            {
+                 self.foundCities = result.array;
+                 [self.tableView reloadData];
+            }
+            failure:^(RKObjectRequestOperation *operation, NSError *error)
+            {
+                 // Error handler.
+                 NSLog(@"ERROR %@", error);
+            }];
     [self.cityInput resignFirstResponder];
-}
-
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    NSLog(@"RESPONSE BODY:   %@", response.bodyAsString);
-    
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    self.foundCities = objects;
-    [self.tableView reloadData];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSLog(@"Encountered an error: %@", error);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

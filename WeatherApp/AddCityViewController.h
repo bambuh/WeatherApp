@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface AddCityViewController : UIViewController <RKObjectLoaderDelegate, RKRequestDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface AddCityViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *cityInput;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *foundCities;

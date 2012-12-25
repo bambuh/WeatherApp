@@ -18,26 +18,24 @@
 //  limitations under the License.
 //
 
-
-#import "NSManagedObject+ActiveRecord.h"
+#import <CoreData/CoreData.h>
 
 @class RKHuman;
 
-@interface RKCat : NSManagedObject {
+@interface RKCat : NSManagedObject
 
-}
+@property (nonatomic, strong) NSNumber *age;
+@property (nonatomic, strong) NSNumber *birthYear;
+@property (nonatomic, strong) NSString *color;
+@property (nonatomic, strong) NSDate *createdAt;
+@property (nonatomic, strong) NSNumber *humanId;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *nickName;
+@property (nonatomic, strong) NSNumber *railsID;
+@property (nonatomic, strong) NSString *sex;
+@property (nonatomic, strong) NSDate *updatedAt;
 
-@property (nonatomic, retain) NSNumber *age;
-@property (nonatomic, retain) NSNumber *birthYear;
-@property (nonatomic, retain) NSString *color;
-@property (nonatomic, retain) NSDate *createdAt;
-@property (nonatomic, retain) NSNumber *humanId;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *nickName;
-@property (nonatomic, retain) NSNumber *railsID;
-@property (nonatomic, retain) NSString *sex;
-@property (nonatomic, retain) NSDate *updatedAt;
-
-@property (nonatomic, retain) RKHuman *human;
+@property (nonatomic, strong) RKHuman *human;
+@property (nonatomic, strong) NSSet *favoriteOfHumans;
 
 @end

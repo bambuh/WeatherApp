@@ -58,7 +58,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"+++++++: %i",[[ForecastDay findByAttribute:@"city" withValue:self.detailItem] count]);
+    
     return [[ForecastDay findByAttribute:@"city" withValue:self.detailItem] count];
 }
 
@@ -76,7 +76,6 @@
     cell.weatherText.text = [[[ForecastDay findByAttribute:@"city" withValue:self.detailItem] objectAtIndex:indexPath.row] text];
     NSArray *arr = [[NSArray alloc] initWithObjects:cell.icon, [[[ForecastDay findByAttribute:@"city" withValue:self.detailItem] objectAtIndex:indexPath.row] iconUrl], nil];
     [self performSelectorInBackground:@selector(loadIcon:) withObject:arr];
-    NSLog(@"-----------: %@", cell.weatherText.text);
     return cell;
 }
 

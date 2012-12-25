@@ -20,7 +20,6 @@
 
 
 #import "RKHuman.h"
-#import "NSDictionary+RKAdditions.h"
 
 @implementation RKHuman
 
@@ -34,14 +33,20 @@
 @dynamic updatedAt;
 @dynamic favoriteColors;
 
+@dynamic favoriteCatID;
 @dynamic favoriteCat;
 @dynamic cats;
 @dynamic catIDs;
 @dynamic catsInOrderByAge;
+@dynamic isHappy;
 
-- (NSString *)polymorphicResourcePath
-{
-    return @"/this/is/the/path";
-}
+@dynamic house;
+@dynamic landlord;
+@dynamic roommates;
+@dynamic tenants;
+@dynamic residence;
+@dynamic housesResidedAt;
+@dynamic friends;
+@dynamic friendsInTheOrderWeMet;
 
 @end

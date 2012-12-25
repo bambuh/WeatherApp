@@ -12,16 +12,12 @@ rescue LoadError
   # No debugging...
 end
 
-ENV["DB"] = "rack_oauth2_server"
-
 # Import the RestKit Test server
 $: << File.join(File.expand_path(File.dirname(__FILE__)), 'lib')
 require File.expand_path(File.dirname(__FILE__)) + '/fixtures'
 require 'restkit/network/authentication'
 require 'restkit/network/etags'
 require 'restkit/network/timeout'
-require 'restkit/network/oauth1'
-require 'restkit/network/oauth2'
 require 'restkit/network/redirection'
 
 class Person < Struct.new(:name, :age)
@@ -86,6 +82,23 @@ class RestKitTestServer < Sinatra::Base
     status 200
     content_type 'application/json'
     "{}"
+  end
+
+  delete '/humans/204' do
+    status 204
+    content_type 'application/json'
+  end
+  
+  delete '/humans/empty' do
+    status 200
+    content_type 'application/json'
+    ""
+  end
+  
+  delete '/humans/success' do
+    status 200
+    content_type 'application/json'
+    {:humans => {:status => 'OK'}}.to_json
   end
 
   post '/echo_params' do
@@ -255,6 +268,36 @@ class RestKitTestServer < Sinatra::Base
       etag(tag)
       render_fixture '/JSON/humans/all.json'
     end
+  end
+  
+  get '/object_manager/cancel' do
+    sleep 0.05
+    status 204
+  end
+  
+  get '/object_manager/:objectID/cancel' do
+    sleep 0.05
+    status 204
+  end
+  
+  get '/304' do
+    status 304
+  end
+  
+  get '/204_with_not_modified_status' do
+    status 204
+    response.headers['Status'] = '304 Not Modified'
+  end
+  
+  delete '/humans/1234/whitespace' do
+    content_type 'application/json'
+    status 200
+    ' '
+  end
+  
+  post '/ComplexUser' do
+    content_type 'application/json'
+    render_fixture('/JSON/ComplexNestedUser.json', :status => 200)
   end
 
   # start the server if ruby file executed directly

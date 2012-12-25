@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
 
 @interface FoundCity : NSObject
 
 @property (strong, nonatomic) NSString * city;
 @property (strong, nonatomic) NSString * location;
 
++(RKResponseDescriptor *)responseDescriptor;
 
 @end

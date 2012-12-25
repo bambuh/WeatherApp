@@ -21,14 +21,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RKObjectMapperTestModel : NSObject {
-    NSString *_name;
-    NSNumber *_age;
-    NSDate *_createdAt;
-}
+@interface RKObjectMapperTestModel : NSObject
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSNumber *age;
-@property (nonatomic, retain) NSDate *createdAt;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSNumber *age;
+@property (nonatomic, strong) NSDate *createdAt;
 
 @end

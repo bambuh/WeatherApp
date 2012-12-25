@@ -18,28 +18,39 @@
 //  limitations under the License.
 //
 
-#import "NSManagedObject+ActiveRecord.h"
+#import <CoreData/CoreData.h>
 
-@class RKCat;
+@class RKCat, RKHouse, RKResident;
 
-@interface RKHuman : NSManagedObject {
-}
+@interface RKHuman : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *railsID;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *nickName;
-@property (nonatomic, retain) NSDate *birthday;
-@property (nonatomic, retain) NSString *sex;
-@property (nonatomic, retain) NSNumber *age;
-@property (nonatomic, retain) NSDate *createdAt;
-@property (nonatomic, retain) NSDate *updatedAt;
-@property (nonatomic, retain) NSArray *favoriteColors;
+@property (nonatomic, strong) NSNumber *railsID;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *nickName;
+@property (nonatomic, strong) NSDate *birthday;
+@property (nonatomic, strong) NSString *sex;
+@property (nonatomic, strong) NSNumber *age;
+@property (nonatomic, strong) NSDate *createdAt;
+@property (nonatomic, strong) NSDate *updatedAt;
+@property (nonatomic, strong) NSArray *favoriteColors;
 
-@property (nonatomic, retain) NSSet *cats;
-@property (nonatomic, retain) RKCat *favoriteCat;
+@property (nonatomic, strong) NSSet *cats;
+@property (nonatomic, strong) NSNumber *favoriteCatID;
+@property (nonatomic, strong) RKCat *favoriteCat;
 
-@property (nonatomic, retain) NSArray *catIDs;
-@property (nonatomic, retain) NSOrderedSet *catsInOrderByAge;
+@property (nonatomic, strong) NSArray *catIDs;
+@property (nonatomic, strong) NSOrderedSet *catsInOrderByAge;
+
+@property (nonatomic, strong) RKHouse *house;
+@property (nonatomic, strong) RKHuman *landlord;
+@property (nonatomic, strong) NSSet *roommates;
+@property (nonatomic, strong) NSSet *tenants;
+@property (nonatomic, strong) RKHouse *residence;
+@property (nonatomic, strong) NSSet *housesResidedAt;
+
+@property (nonatomic, strong) NSSet *friends;
+@property (nonatomic, strong) NSOrderedSet *friendsInTheOrderWeMet;
+@property (nonatomic, strong) NSNumber *isHappy;
 
 @end
 
@@ -48,5 +59,4 @@
 - (void)removeCatsObject:(RKCat *)value;
 - (void)addCats:(NSSet *)value;
 - (void)removeCats:(NSSet *)value;
-
 @end
