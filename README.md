@@ -36,16 +36,69 @@ in 0.20
 [RKMIMETypeSerialization registerClass:[RKNSJSONSerialization class] forMIMEType:@"text/html"];
 ```
 
-## Registering parser
+## Working with object manager
 
 in 0.10
 ```  objective-c
-[[RKParserRegistry sharedRegistry] setParserClass:[RKJSONParserJSONKit class] forMIMEType:@"text/html"];
+RKManagedObjectMapping *objectMapping = [RKManagedObjectMapping mappingForClass:[ForecastDay class] inManagedObjectStore:UIAppDelegate.objectStore];
+objectMapping.primaryKeyAttribute = @"city";
+[objectMapping mapKeyPath:@"period" toAttribute:@"day"];
+[objectMapping mapKeyPath:@"icon_url" toAttribute:@"iconUrl"];
+[objectMapping mapKeyPath:@"fcttext_metric" toAttribute:@"text"];
+NSString *resourcePath = [NSString stringWithFormat:@"/api/ada2b3fdf05e0a10/forecast%@.json", self.location];
+[RKObjectManager.sharedmanager.mappingProvider setObjectMapping:objectMapping forKeyPath:@"forecast.txt_forecast.forecastday"];
+[RKObjectManager.sharedmanager loadObjectsAtResourcePath:resourcePath delegate:self];
+```
+```  objective-c
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    NSManagedObjectContext * context = [objects[0] managedObjectContext];
+    City *cityInCurrentContext = [City findFirstByAttribute:@"city" withValue:self.city inContext:context];
+    NSSet *set = [NSSet setWithArray:objects];
+    [cityInCurrentContext addForecastDay:set];
+    
+    NSError *error = nil;
+    if (![context save:&error]) {
+    }
+    
+}
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Encountered an error: %@", error);
+}
 ```
 
 in 0.20
 ```  objective-c
-[RKMIMETypeSerialization registerClass:[RKNSJSONSerialization class] forMIMEType:@"text/html"];
+RKEntityMapping *objectMapping =
+    [RKEntityMapping mappingForEntityForName:@"ForecastDay"
+                        inManagedObjectStore:RKManagedObjectStore.defaultStore];
+[objectMapping addAttributeMappingsFromDictionary:@{ @"period": @"day", @"icon_url": @"iconUrl", @"fcttext_metric": @"text" }];
+mapping.identificationAttributes = @[@"city"] ;
+RKResponseDescriptor *responseDescriptor =
+    [RKResponseDescriptor responseDescriptorWithMapping:objectMapping
+                                            pathPattern:nil
+                                                keyPath:@"forecast.txt_forecast.forecastday"
+                                            statusCodes:nil];
+[RKObjectManager.sharedmanager addResponseDescriptor:responseDescriptor];
+NSString *resourcePath = [NSString stringWithFormat:@"api/ada2b3fdf05e0a10/forecast%@.json", self.location];
+[UIAppDelegate.objectManager
+     getObjectsAtPath:resourcePath parameters:nil
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *result)
+     {
+         NSManagedObjectContext * context = [result.firstObject managedObjectContext];
+         City *cityInCurrentContext = [[City findByAttribute:@"city" withValue:self.city inContext:context] objectAtIndex:0];
+         [cityInCurrentContext addForecastDay:result.set];
+         NSError *error = nil;
+         if (![context save:&error]) {
+             NSLog(@"ERROR: %@", error);
+         }
+         [[[RKManagedObjectStore defaultStore] mainQueueManagedObjectContext] save:&error];
+         [[[RKManagedObjectStore defaultStore] persistentStoreManagedObjectContext] save:&error];
+     }
+     failure:^(RKObjectRequestOperation *operation, NSError *error)
+     {
+         // Error handler.
+         NSLog(@"ERROR %@", error);
+     }];
 ```
 
 
