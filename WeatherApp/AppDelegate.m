@@ -11,7 +11,6 @@
 
 @implementation AppDelegate
 
-//@synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize objectStore = _objectStore;
